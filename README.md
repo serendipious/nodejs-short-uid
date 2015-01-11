@@ -7,21 +7,25 @@ Given a dictionary size of M and an required ID length <= n, the generator has a
 
 	M + M^2 + M^3 + ... + M^n 		(Number of IDs with length <= n)
 
-This provides very length-efficient IDs even for modest lengths. For example, if you wish to generate IDs of length no greater than 6, then the generator's can output as many as 57,731,386,986 (~57 Billion) unique ids.
+This provides very length-efficient IDs even for modest lengths. For example, if you wish to generate IDs of length no greater than 6, then the generator's can output as many as **57,731,386,986 (~57 Billion)** unique ids.
 
-# [Installation]
+# Installation
 	npm install short-uid
 
-# [Usage]
+# Usage
 
 * Import the module:
 
-		var ShortUUID = require('short-uid');
+		var ShortUID = require('short-uid');
 		
 * Instantiate Id Generator:
 
-		var idGen = new ShortUUID();
+		var idGen = new ShortUID();
 		
 * Generate Counter-based ID:
 
 		var id = idGen.counterUUID();
+		
+* Generate Random ID:
+
+		var id = idGen.randomUUID();
