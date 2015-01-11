@@ -13,7 +13,10 @@ MOCHA  := ${NODE_MODULES_BIN}/mocha
 COFFEE := ${NODE_MODULES_BIN}/coffee
 UGLIFY := ${NODE_MODULES_BIN}/uglifyjs
 
-all: clean compile test
+all: clean install compile test
+
+install:
+	npm install
 
 compile:
 	${COFFEE} -o ${LIB_DIR} -c ${SRC_DIR}/*.coffee
@@ -23,4 +26,4 @@ test: compile
 	NODE_PATH=${NODE_PATH} ${MOCHA} -s 1000 --compilers coffee:coffee-script/register -R spec ${TST_DIR}
 
 clean:
-	rm -rf ${LIB_DIR} ${DIST_DIR}
+	rm -rf ${LIB_DIR} ${DIST_DIR} ${NODE_MODULES}
