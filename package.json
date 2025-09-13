@@ -1,24 +1,82 @@
 {
   "name": "short-uid",
   "description": "Length Efficient Unique ID Generator",
-  "version": "0.1.0",
+  "version": "2.0.0",
   "author": "Ankit Kuwadekar",
-  "main": "./lib/short-uid.js",
+  "main": "./dist/short-uid.js",
+  "types": "./dist/short-uid.d.ts",
+  "module": "./dist/short-uid.esm.js",
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "CONTRIBUTING.md",
+    "LICENSE"
+  ],
   "scripts": {
-    "postInstall": "make"
+    "build": "npm run clean && npm run compile",
+    "clean": "rimraf dist",
+    "compile": "tsc && rollup -c",
+    "test": "mocha -r ts-node/register --require tsconfig-paths/register tst/**/*.test.ts",
+    "test:watch": "mocha -r ts-node/register --watch tst/**/*.test.ts",
+    "test:coverage": "c8 --reporter=text --reporter=html --reporter=lcov --lines=95 --functions=100 --branches=85 --statements=95 npm test",
+    "test:coverage:report": "c8 report --reporter=html",
+    "lint": "eslint src/**/*.ts tst/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts tst/**/*.ts --fix",
+    "prepublishOnly": "npm run build",
+    "postInstall": "npm run build"
   },
   "engines": {
-    "node": "*"
+    "node": ">=20.0.0"
   },
   "keywords": [
     "uuid",
     "uid",
     "short",
-    "generator"
+    "generator",
+    "typescript",
+    "unique-id",
+    "id-generator"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ankitkuwadekar/nodejs-short-uid.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ankitkuwadekar/nodejs-short-uid/issues"
+  },
+  "homepage": "https://github.com/ankitkuwadekar/nodejs-short-uid#readme",
   "devDependencies": {
-    "coffee-script": "^1.8.0",
-    "mocha": "^1.21.4",
-    "uglify-js": "^2.4.15"
+    "@types/chai": "^4.3.15",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^20.14.9",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "chai": "^4.4.1",
+    "eslint": "^9.15.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.10",
+    "mocha": "^10.8.2",
+    "c8": "^9.0.0",
+    "rimraf": "^6.0.1",
+    "rollup": "^4.18.0",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^12.1.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "tslib": "^2.6.2",
+    "typescript": "^5.6.3"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged && npm run test:coverage"
+    }
   }
 }

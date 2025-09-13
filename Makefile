@@ -1,4 +1,3 @@
-LIB_DIR 	:= ./lib
 DIST_DIR 	:= ./dist
 SRC_DIR 	:= ./src
 TST_DIR 	:= ./tst
@@ -10,8 +9,9 @@ NODE_MODULES := ./node_modules
 NODE_MODULES_BIN := ${NODE_MODULES}/.bin
 
 MOCHA  := ${NODE_MODULES_BIN}/mocha
-COFFEE := ${NODE_MODULES_BIN}/coffee
-UGLIFY := ${NODE_MODULES_BIN}/uglifyjs
+TSC    := ${NODE_MODULES_BIN}/tsc
+ROLLUP := ${NODE_MODULES_BIN}/rollup
+NYC    := ${NODE_MODULES_BIN}/nyc
 
 all: clean install compile test
 
@@ -19,11 +19,13 @@ install:
 	npm install
 
 compile:
-	${COFFEE} -o ${LIB_DIR} -c ${SRC_DIR}/*.coffee
-	mkdir -p ${DIST_DIR} && ${UGLIFY} ${LIB_DIR}/${TARGET_FILENAME}.js > ${DIST_DIR}/${TARGET_FILENAME}.min.js
+	${TSC} && ${ROLLUP} -c
 
 test: compile
-	NODE_PATH=${NODE_PATH} ${MOCHA} -s 1000 --compilers coffee:coffee-script/register -R spec ${TST_DIR}
+	NODE_PATH=${NODE_PATH} ${MOCHA} -r ts-node/register ${TST_DIR}/**/*.test.ts
+
+test-coverage: compile
+	${NYC} ${MOCHA} -r ts-node/register ${TST_DIR}/**/*.test.ts
 
 clean:
-	rm -rf ${LIB_DIR} ${DIST_DIR} ${NODE_MODULES}
+	rm -rf ${DIST_DIR} ${NODE_MODULES}
